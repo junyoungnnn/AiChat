@@ -1,16 +1,139 @@
-import OpenAI from "openai";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat with Your Maid</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    #conversation {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .message {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .message p {
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .message.user {
+      justify-content: flex-end;
+    }
+    .message.user p {
+      background-color: #007BFF;
+      color: white;
+      border-bottom-right-radius: 0;
+    }
+    .message.assistant {
+      justify-content: flex-start;
+    }
+    .message.assistant p {
+      background-color: #28A745;
+      color: white;
+      border-bottom-left-radius: 0;
+    }
+    #inputArea {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    #inputArea input {
+      width: 300px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    #inputArea button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #007BFF;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #inputArea button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  <script>
+    let conversation = [];
 
-const openai = new OpenAI();
+    async function sendMessage() {
+      const messageInput = document.getElementById("message");
+      const message = messageInput.value;
+      const responseElement = document.getElementById("response");
 
-async function main() {
-  const completion = await openai.chat.completions.create({
-    messages: [{"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Who won the world series in 2020?"},
-        {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
-        {"role": "user", "content": "Where was it played?"}],
-    model: "gpt-3.5-turbo",
-  });
+      if (!message) return;
 
-  console.log(completion.choices[0]);
-}
-main();
+      // 사용자의 메시지를 대화에 추가
+      conversation.push({ role: "user", content: message });
+      updateConversation();
+
+      try {
+        const response = await fetch("http://localhost:8000/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+        conversation.push({ role: "assistant", content: data.response });
+        updateConversation();
+      } catch (error) {
+        console.error("Error:", error);
+        responseElement.innerText = "Something went wrong. Please try again.";
+      } finally {
+        messageInput.value = "";
+      }
+    }
+
+    function updateConversation() {
+      const conversationElement = document.getElementById("conversation");
+      conversationElement.innerHTML = conversation.map(entry => {
+        const roleClass = entry.role === "user" ? "user" : "assistant";
+        return `<div class="message ${roleClass}"><p><strong>${entry.role === "user" ? "나" : "메이드"}:</strong> ${entry.content}</p></div>`;
+      }).join("");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const messageInput = document.getElementById("message");
+      messageInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      });
+
+      const sendButton = document.getElementById("sendButton");
+      sendButton.addEventListener("click", sendMessage);
+    });
+  </script>
+</head>
+<body>
+  <h1>Chat with Your Maid</h1>
+  <div id="conversation"></div>
+  <div id="inputArea">
+    <input type="text" id="message" placeholder="Type your message here">
+    <button id="sendButton">Send</button>
+  </div>
+  <p id="response"></p>
+</body>
+</html>

@@ -1,12 +1,13 @@
 {
   "type": "module",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
     "openai": "^4.51.0"
   },
   "name": "webprofinal",
   "version": "1.0.0",
   "main": "app.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
