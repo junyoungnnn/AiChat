@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/style.css">
+  <title>Chat with Your <%= character === 'maid' ? 'Maid' : 'Doctor' %></title>
+  <style>
+    
+  </style>
+  <script>
+    let conversation = [];
+    const character = "<%= character %>";
+
+    async function fetchConversations() {
+      try {
+        const response = await fetch(`/conversations/${character}`);
+        const data = await response.json();
+        conversation = data.conversations;
+        updateConversation();
+      } catch (error) {
+        console.error("에러:", error);
+        alert("대화 내용을 가져오는 데 실패했습니다.");
+      }
+    }
+
+    async function sendMessage() {
+      const messageInput = document.getElementById("message");
+      const message = messageInput.value;
+
+      if (!message) return;
+
+      try {
+        const response = await fetch(`/chat/${character}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+        conversation = data.conversations;
+        updateConversation();
+      } catch (error) {
+        console.error("에러:", error);
+        alert("메시지 전송 중 문제가 발생했습니다.");
+      } finally {
+        messageInput.value = "";
+      }
+    }
+
+    function updateConversation() {
+      const conversationElement = document.getElementById("conversation");
+      conversationElement.innerHTML = conversation.map(entry => {
+        const roleClass = entry.role === "user" ? "user" : "assistant";
+        return `<div class="message ${roleClass}"><p><strong>${entry.role === "user" ? "나" : character === 'maid' ? "메이드" : "박사님"}:</strong> ${entry.content}</p></div>`;
+      }).join("");
+      conversationElement.scrollTop = conversationElement.scrollHeight;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchConversations();
+
+      const sendButton = document.getElementById("sendButton");
+      sendButton.addEventListener("click", sendMessage);
+
+      const messageInput = document.getElementById("message");
+      messageInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Chat with Your <%= character === 'maid' ? 'Maid' : 'Doctor' %></h1>
+  <div class="switch-buttons">
+    <a href="/index/maid">Maid</a>
+    <a href="/index/doctor">Doctor</a>
+  </div>
+  <div id="conversation"></div>
+  <div id="inputArea">
+    <input type="text" id="message" placeholder="Type your message here...">
+    <button id="sendButton">Send</button>
+  </div>
+</body>
+</html>
