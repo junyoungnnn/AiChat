@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/styles/style.css">
   <title>Chat with Your <%= character === 'maid' ? 'Maid' : 'Doctor' %></title>
-  <style>
-    
-  </style>
   <script>
     let conversation = [];
     const character = "<%= character %>";
@@ -57,6 +54,13 @@
         return `<div class="message ${roleClass}"><p><strong>${entry.role === "user" ? "나" : character === 'maid' ? "메이드" : "박사님"}:</strong> ${entry.content}</p></div>`;
       }).join("");
       conversationElement.scrollTop = conversationElement.scrollHeight;
+
+      // 박사님 캐릭터일 경우 스타일 변경
+      if (character === 'doctor') {
+        document.querySelectorAll('.message.assistant p').forEach(element => {
+          element.classList.add('doctor-style');
+        });
+      }
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -80,7 +84,17 @@
     <a href="/index/maid">Maid</a>
     <a href="/index/doctor">Doctor</a>
   </div>
-  <div id="conversation"></div>
+  <div class="chat-container">
+    <div class="image-container">
+      <img src="<%= character === 'maid' ? '/images/mahiru1.png' : '/images/brown1.png' %>" alt="Image 1" class="side-image" id="<%= character === 'maid' ? 'mahiru-image' : 'brown-image' %>">
+      <div class="tooltip" id="<%= character === 'maid' ? 'mahiru-tooltip' : 'brown-tooltip' %>">말풍선 텍스트</div>
+    </div>
+    <div id="conversation"></div>
+    <div class="image-container">
+      <img src="/images/yuji1.png" alt="Image 2" class="side-image" id="yuji-image">
+      <div class="tooltip" id="yuji-tooltip">말풍선 텍스트</div>
+    </div>
+  </div>
   <div id="inputArea">
     <input type="text" id="message" placeholder="Type your message here...">
     <button id="sendButton">Send</button>
