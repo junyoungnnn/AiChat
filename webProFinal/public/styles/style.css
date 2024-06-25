@@ -28,15 +28,16 @@ h1 {
 .tooltip {
   display: none;
   position: absolute;
-  bottom: 100%;
+  bottom: 95%;
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 100px;
   padding: 5px 10px;
-  background-color: rgba(0, 0, 0, 0.75);
-  color: white;
+  background-color: rgba(255, 255, 255, 1);
+  color: black;
   border-radius: 5px;
   white-space: nowrap;
+  border: 1px solid black;
 }
 .image-container:hover .tooltip {
   display: block;
@@ -45,11 +46,14 @@ h1 {
 #mahiru-image:hover {
   content: url('/images/mahiru2.png'); /* 마우스를 올렸을 때 이미지 변경 */
 }
-#yuji-image:hover {
+#yuji-image:hover{
   content: url('/images/yuji2.png'); /* 마우스를 올렸을 때 이미지 변경 */
 }
+#yuji-image:hover + .tooltip{
+  bottom: 87.5%;
+}
 #brown-image:hover {
-  content: url('/images/brown2.jpg'); /* 마우스를 올렸을 때 이미지 변경 */
+  content: url('/images/brown2.png'); /* 마우스를 올렸을 때 이미지 변경 */
 }
 
 #conversation {

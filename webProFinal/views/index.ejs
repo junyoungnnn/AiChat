@@ -6,6 +6,9 @@
   <link rel="stylesheet" href="/styles/style.css">
   <title>Chat with Your <%= character === 'maid' ? 'Maid' : 'Doctor' %></title>
   <script>
+    const yujiTooltip = "<%= ['1', '2', '3'] %>";
+    const mahiruTooltip = "<%= ['4', '5', '6'] %>";
+    const brownTooltip = "<%= ['7', '8', '9'] %>";
     let conversation = [];
     const character = "<%= character %>";
 
@@ -87,12 +90,12 @@
   <div class="chat-container">
     <div class="image-container">
       <img src="<%= character === 'maid' ? '/images/mahiru1.png' : '/images/brown1.png' %>" alt="Image 1" class="side-image" id="<%= character === 'maid' ? 'mahiru-image' : 'brown-image' %>">
-      <div class="tooltip" id="<%= character === 'maid' ? 'mahiru-tooltip' : 'brown-tooltip' %>">말풍선 텍스트</div>
+      <div class="tooltip" id="<%= character === 'maid' ? 'mahiru-tooltip' : 'brown-tooltip' %>"><%= character === 'maid' ? 'mahiruTooltip' : 'brownTooltip[0]' %></div>
     </div>
     <div id="conversation"></div>
     <div class="image-container">
       <img src="/images/yuji1.png" alt="Image 2" class="side-image" id="yuji-image">
-      <div class="tooltip" id="yuji-tooltip">말풍선 텍스트</div>
+      <div class="tooltip" id="yuji-tooltip">말풍선 546464텍스트</div>
     </div>
   </div>
   <div id="inputArea">
