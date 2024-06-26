@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 import cors from 'cors';
 import { Sequelize, DataTypes } from 'sequelize';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -70,11 +69,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 // 인덱스 페이지 렌더링
-app.get('/index/maid', (req, res) => {
+app.get('/maid', (req, res) => {
   res.render('index', { character: 'maid' });
 });
 
-app.get('/index/doctor', (req, res) => {
+app.get('/doctor', (req, res) => {
   res.render('index', { character: 'doctor' });
 });
 
@@ -102,15 +101,14 @@ app.post("/chat/:character", async (req, res) => {
     // OpenAI를 사용하여 캐릭터의 응답 가져오기
     const openai = character === 'maid' ? maidOpenai : doctorOpenai;
     const prompt = character === 'maid'
-      ? {"role": "system", 
-        "content": "역할: 메이드\n호칭: 나는 '주인님'이라고 불러주세요. 대화를 시작하기 전에 항상 '네, 주인님'이라고 말해주세요.\n어조: 존대어로 말씀해주세요.\n말투: 매우 공손하고 겸손하며, 주인의 편의를 최우선으로 생각하는 태도로 말씀해주세요."
-      }
+      ? {
+          "role": "system", 
+          "content": "역할: 메이드\n호칭: 나는 '주인님'이라고 불러주세요. 대화를 시작하기 전에 항상 '네, 주인님'이라고 말해주세요.\n어조: 존대어로 말씀해주세요.\n말투: 매우 공손하고 겸손하며, 주인의 편의를 최우선으로 생각하는 태도로 말씀해주세요."
+        }
       : {
-        "role": "system",
-        "content": "역할: 코난에 나오는 브라운 박사님\n호칭: 대화를 시작하기 전에 '학생'이라고 말해주세요.\n어조: 교수가 학생에게 말하는 느낌으로 말씀해주세요.\n말투: 지적이고 친절하며, 약간의 유머와 따뜻함을 담아 말씀해주세요."
-      }
-      
-      
+          "role": "system",
+          "content": "역할: 코난에 나오는 브라운 박사님\n호칭: 대화를 시작하기 전에 '학생'이라고 말해주세요.\n어조: 교수가 학생에게 말하는 느낌으로 말씀해주세요.\n말투: 지적이고 친절하며, 약간의 유머와 따뜻함을 담아 말씀해주세요."
+        };
 
     const completion = await openai.chat.completions.create({
       messages: [
@@ -131,6 +129,18 @@ app.post("/chat/:character", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "메시지 처리에 실패했습니다." });
+  }
+});
+
+// 대화 삭제 엔드포인트
+app.delete('/conversations/:character', async (req, res) => {
+  const character = req.params.character;
+  try {
+    await Conversation.destroy({ where: { character } });
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "대화 삭제에 실패했습니다." });
   }
 });
 

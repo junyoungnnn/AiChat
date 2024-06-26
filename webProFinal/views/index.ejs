@@ -50,6 +50,25 @@
       }
     }
 
+    async function deleteConversations() {
+      try {
+        const response = await fetch(`/conversations/${character}`, {
+          method: "DELETE"
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          conversation = [];
+          updateConversation();
+        } else {
+          alert("대화 삭제에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("에러:", error);
+        alert("대화 삭제 중 문제가 발생했습니다.");
+      }
+    }
+
     function updateConversation() {
       const conversationElement = document.getElementById("conversation");
       conversationElement.innerHTML = conversation.map(entry => {
@@ -102,6 +121,9 @@
       const sendButton = document.getElementById("sendButton");
       sendButton.addEventListener("click", sendMessage);
 
+      const deleteButton = document.getElementById("deleteButton");
+      deleteButton.addEventListener("click", deleteConversations);
+
       const messageInput = document.getElementById("message");
       messageInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
@@ -114,9 +136,10 @@
 <body>
   <h1><%= character === 'maid' ? '메이드와 대화' : '브라운 박사님과 대화' %></h1>
   <div class="switch-buttons">
-    <a href="/index/maid">Maid</a>
-    <a href="/index/doctor">Doctor</a>
+    <a href="/maid">Maid</a>
+    <a href="/doctor">Doctor</a>
   </div>
+  <button id="deleteButton">Delete</button>
   <div class="chat-container">
     <div class="image-container">
       <img src="<%= character === 'maid' ? '/images/mahiru1.png' : '/images/brown1.png' %>" alt="Image 1" class="side-image" id="<%= character === 'maid' ? 'mahiru-image' : 'brown-image' %>">

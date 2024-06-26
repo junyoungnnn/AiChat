@@ -157,7 +157,7 @@ h1 {
 
 .switch-buttons {
   position: absolute;
-  top: 100px;
+  top: 20px; /* Switch 버튼의 위치를 위로 조정 */
   left: 20px;
   display: flex;
   flex-direction: column;
@@ -175,6 +175,22 @@ h1 {
 
 .switch-buttons a:hover {
   background-color: #0056b3;
+}
+
+#deleteButton {
+  position: absolute;
+  top: 20px; /* 삭제 버튼의 위치를 위로 조정 */
+  right: 20px; /* 오른쪽 상단으로 위치 조정 */
+  padding: 10px 20px;
+  border: none;
+  background-color: #DC3545;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#deleteButton:hover {
+  background-color: #C82333;
 }
 
 @media (max-width: 768px) {
@@ -223,5 +239,9 @@ h1 {
 
   .switch-buttons {
     top: 20px;
+  }
+
+  #deleteButton {
+    top: 70px; /* 모바일에서 삭제 버튼의 위치를 아래로 조정 */
   }
 }
