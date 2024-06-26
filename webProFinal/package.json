@@ -2,10 +2,11 @@
   "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "module": "^1.2.5",
-    "openai": "^4.51.0",
+    "openai": "^4.52.1",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7"
   },
