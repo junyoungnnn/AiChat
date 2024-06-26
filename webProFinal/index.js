@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import OpenAI from "openai"; // 수정된 부분
+import OpenAI from "openai";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
@@ -19,7 +19,7 @@ const sequelize = new Sequelize({
   storage: "database.sqlite",
 });
 
-// 대화 모델 정의
+// SQLite 모델 정의
 const Conversation = sequelize.define(
   "Conversation",
   {
@@ -41,23 +41,25 @@ const Conversation = sequelize.define(
 
 // 데이터베이스와 연결 및 character 컬럼 추가
 (async () => {
-  await sequelize.sync();
-  const tableInfo = await sequelize
+  // 비동기 함수 실행
+  await sequelize.sync(); // 데이터베이스 동기화
+  const tableInfo = await sequelize // 테이블 정보 가져오기
     .getQueryInterface()
     .describeTable("Conversations");
   if (!tableInfo.character) {
-    await sequelize
+    // 컬럼 존재 여부 확인
+    await sequelize // 새로운 컬럼 추가
       .getQueryInterface()
       .addColumn("Conversations", "character", {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: "maid", // 기본값을 설정하여 기존 데이터와의 충돌 방지
+        // 기본값을 설정하여 기존 데이터와의 충돌 방지
+        defaultValue: "maid",
       });
   }
 })();
 
 // OpenAI API 설정
-
 dotenv.config();
 
 const openaiApiKey1 = process.env.OPENAI_API_KEY1;
