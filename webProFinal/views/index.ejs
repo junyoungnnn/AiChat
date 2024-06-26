@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/styles/style.css">
-  <title>Chat with Your <%= character === 'maid' ? 'Maid' : 'Doctor' %></title>
+  <title><%= character === 'maid' ? '메이드와 대화' : '브라운 박사님과 대화' %></title>
   <script>
-    const yujiTooltip = "<%= ['1', '2', '3'] %>";
-    const mahiruTooltip = "<%= ['4', '5', '6'] %>";
-    const brownTooltip = "<%= ['7', '8', '9'] %>";
+    const yujiTooltip = ["웹프로그래밍!", "기말프로젝트", "가상의 인물과 대화하기"];
+    const mahiruTooltip = ["뭐든 시켜만 주세요", "빤히 쳐다보지 말아주세요", "필요한게 있으신가요?"];
+    const brownTooltip = ["뭐든지 물어보렴", "그렇네, 네가 정말 잘 하고 있어!", "실수는 누구나 하는 거야, 중요한 건 배움이지"];
     let conversation = [];
     const character = "<%= character %>";
 
@@ -66,8 +66,38 @@
       }
     }
 
+    function getRandomTooltip(tooltips) {
+      return tooltips[Math.floor(Math.random() * tooltips.length)];
+    }
+
+    function addTooltipEventListeners() {
+      const yujiImage = document.getElementById("yuji-image");
+      const yujiTooltipElement = document.getElementById("yuji-tooltip");
+
+      yujiImage.addEventListener("mouseover", () => {
+        yujiTooltipElement.textContent = getRandomTooltip(yujiTooltip);
+      });
+
+      if (character === 'maid') {
+        const mahiruImage = document.getElementById("mahiru-image");
+        const mahiruTooltipElement = document.getElementById("mahiru-tooltip");
+
+        mahiruImage.addEventListener("mouseover", () => {
+          mahiruTooltipElement.textContent = getRandomTooltip(mahiruTooltip);
+        });
+      } else {
+        const brownImage = document.getElementById("brown-image");
+        const brownTooltipElement = document.getElementById("brown-tooltip");
+
+        brownImage.addEventListener("mouseover", () => {
+          brownTooltipElement.textContent = getRandomTooltip(brownTooltip);
+        });
+      }
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       fetchConversations();
+      addTooltipEventListeners();
 
       const sendButton = document.getElementById("sendButton");
       sendButton.addEventListener("click", sendMessage);
@@ -82,7 +112,7 @@
   </script>
 </head>
 <body>
-  <h1>Chat with Your <%= character === 'maid' ? 'Maid' : 'Doctor' %></h1>
+  <h1><%= character === 'maid' ? '메이드와 대화' : '브라운 박사님과 대화' %></h1>
   <div class="switch-buttons">
     <a href="/index/maid">Maid</a>
     <a href="/index/doctor">Doctor</a>
@@ -90,12 +120,12 @@
   <div class="chat-container">
     <div class="image-container">
       <img src="<%= character === 'maid' ? '/images/mahiru1.png' : '/images/brown1.png' %>" alt="Image 1" class="side-image" id="<%= character === 'maid' ? 'mahiru-image' : 'brown-image' %>">
-      <div class="tooltip" id="<%= character === 'maid' ? 'mahiru-tooltip' : 'brown-tooltip' %>"><%= character === 'maid' ? 'mahiruTooltip' : 'brownTooltip[0]' %></div>
+      <div class="tooltip" id="<%= character === 'maid' ? 'mahiru-tooltip' : 'brown-tooltip' %>"></div>
     </div>
     <div id="conversation"></div>
     <div class="image-container">
       <img src="/images/yuji1.png" alt="Image 2" class="side-image" id="yuji-image">
-      <div class="tooltip" id="yuji-tooltip">말풍선 546464텍스트</div>
+      <div class="tooltip" id="yuji-tooltip"></div>
     </div>
   </div>
   <div id="inputArea">

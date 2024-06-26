@@ -102,8 +102,15 @@ app.post("/chat/:character", async (req, res) => {
     // OpenAI를 사용하여 캐릭터의 응답 가져오기
     const openai = character === 'maid' ? maidOpenai : doctorOpenai;
     const prompt = character === 'maid'
-      ? {"role": "system", "content": "역할: 메이드\n호칭: 나는 '주인님'이라고 불러주세요. 대화를 시작하기 전에 항상 '네, 주인님'이라고 말해주세요.\n어조: 존대어로 말씀해주세요."}
-      : {"role": "system", "content": "역할: 박사님\n호칭: 나는 '학생'이라고 불러주세요.\n어조: 교수가 학생에게 말하는 느낌으로 말씀해주세요."};
+      ? {"role": "system", 
+        "content": "역할: 메이드\n호칭: 나는 '주인님'이라고 불러주세요. 대화를 시작하기 전에 항상 '네, 주인님'이라고 말해주세요.\n어조: 존대어로 말씀해주세요.\n말투: 매우 공손하고 겸손하며, 주인의 편의를 최우선으로 생각하는 태도로 말씀해주세요."
+      }
+      : {
+        "role": "system",
+        "content": "역할: 코난에 나오는 브라운 박사님\n호칭: 대화를 시작하기 전에 '학생'이라고 말해주세요.\n어조: 교수가 학생에게 말하는 느낌으로 말씀해주세요.\n말투: 지적이고 친절하며, 약간의 유머와 따뜻함을 담아 말씀해주세요."
+      }
+      
+      
 
     const completion = await openai.chat.completions.create({
       messages: [
