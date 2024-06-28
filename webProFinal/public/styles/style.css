@@ -49,7 +49,7 @@ h1 {
 }
 
 .tooltip::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 87.5%;
   left: 50%;
@@ -64,11 +64,11 @@ h1 {
 }
 
 #mahiru-image:hover {
-  content: url("/images/mahiru2.png");
+  content: url('/images/mahiru2.png');
 }
 
 #yuji-image:hover {
-  content: url("/images/yuji2.png");
+  content: url('/images/yuji2.png');
 }
 
 #yuji-image:hover + .tooltip {
@@ -76,7 +76,7 @@ h1 {
 }
 
 #brown-image:hover {
-  content: url("/images/brown2.png");
+  content: url('/images/brown2.png');
 }
 
 #conversation {
@@ -111,19 +111,19 @@ h1 {
 }
 
 .message.user p {
-  background-color: #40cbea;
+  background-color: #40CBEA;
   color: #fff;
   border-top-right-radius: 0;
 }
 
 .message.assistant p {
-  background-color: #fe86c1;
+  background-color: #FE86C1;
   color: #fff;
   border-top-left-radius: 0;
 }
 
 .doctor-style {
-  background-color: #9dd84b !important;
+  background-color: #9DD84B !important;
 }
 
 #inputArea {
@@ -145,7 +145,7 @@ h1 {
 #inputArea button {
   padding: 10px 20px;
   border: none;
-  background-color: #007bff;
+  background-color: #007BFF;
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
@@ -157,7 +157,7 @@ h1 {
 
 .switch-buttons {
   position: absolute;
-  top: 20px;
+  top: 20px; /* Switch 버튼의 위치를 위로 조정 */
   left: 20px;
   display: flex;
   flex-direction: column;
@@ -166,7 +166,7 @@ h1 {
 .switch-buttons a {
   margin: 2px 0;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #007BFF;
   color: #fff;
   text-decoration: none;
   border-radius: 5px;
@@ -179,18 +179,18 @@ h1 {
 
 #deleteButton {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 20px; /* 삭제 버튼의 위치를 위로 조정 */
+  right: 20px; /* 오른쪽 상단으로 위치 조정 */
   padding: 10px 20px;
   border: none;
-  background-color: #dc3545;
+  background-color: #DC3545;
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
 }
 
 #deleteButton:hover {
-  background-color: #c82333;
+  background-color: #C82333;
 }
 
 @media (max-width: 768px) {
@@ -242,6 +242,6 @@ h1 {
   }
 
   #deleteButton {
-    top: 70px;
+    top: 70px; /* 모바일에서 삭제 버튼의 위치를 아래로 조정 */
   }
 }
